@@ -1,0 +1,50 @@
+# Urban Traffic Analysis Script
+# Analyzes and visualizes traffic patterns during peak hours
+import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+
+# Use Agg backend (for non-interactive plotting)
+matplotlib.use('Agg')
+
+# Sample traffic data: Hour of day and vehicle counts
+data = {
+    "Hour": [7, 8, 9, 10, 16, 17, 18, 19],  # Morning and evening hours
+    "Vehicle_Count": [120, 300, 450, 200, 250, 500, 600, 400]
+}
+
+# Create a DataFrame from the data
+traffic_data = pd.DataFrame(data)
+
+# Ensure the data is sorted by Hour for better plot visualization
+traffic_data = traffic_data.sort_values(by="Hour")
+
+# Identify peak traffic hours
+peak_morning = traffic_data[(traffic_data["Hour"] >= 6) & (traffic_data["Hour"] < 12)]  # Morning hours
+peak_evening = traffic_data[(traffic_data["Hour"] >= 16) & (traffic_data["Hour"] < 20)]  # Evening hours
+
+# Find the hour with the maximum traffic in morning and evening
+peak_morning_hour = peak_morning.loc[peak_morning["Vehicle_Count"].idxmax()]
+peak_evening_hour = peak_evening.loc[peak_evening["Vehicle_Count"].idxmax()]
+
+# Print the peak hours
+print(f"Peak Morning Hour: {peak_morning_hour['Hour']} with {peak_morning_hour['Vehicle_Count']} vehicles")
+print(f"Peak Evening Hour: {peak_evening_hour['Hour']} with {peak_evening_hour['Vehicle_Count']} vehicles")
+
+# Visualize the traffic data
+plt.figure(figsize=(10, 6))
+plt.plot(traffic_data["Hour"], traffic_data["Vehicle_Count"], marker='o', color='blue', label="Vehicle Count")
+
+# Highlight the peak hours
+plt.axvline(peak_morning_hour["Hour"], color='green', linestyle='--', label="Morning Peak")
+plt.axvline(peak_evening_hour["Hour"], color='red', linestyle='--', label="Evening Peak")
+
+# Add labels and title
+plt.title("Urban Traffic Patterns During Peak Hours", fontsize=14)
+plt.xlabel("Hour of Day", fontsize=12)
+plt.ylabel("Vehicle Count", fontsize=12)
+plt.legend()
+plt.grid(True)
+
+# Save the plot to a PNG file (no need to call plt.show())
+plt.savefig("traffic_plot.png")  # Save the plot as a file
