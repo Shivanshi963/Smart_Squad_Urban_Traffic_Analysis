@@ -98,3 +98,6 @@ Examples: Open Data portals for urban planning or regional transportation author
 - **Graph**:
   - A visualization showcasing the traffic trends during the day (peak hour).
 
+## Challenges faced
+- **Collection data**
+- **Running code**
